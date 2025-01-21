@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct CentralHiveApp: App {
@@ -13,5 +14,6 @@ struct CentralHiveApp: App {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: [Department.self, Employee.self, Hardware.self])
     }
 }
