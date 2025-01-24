@@ -9,14 +9,14 @@ import Foundation
 import SwiftData
 
 @Model
-class Department {
+class Department: ObservableObject {
     @Attribute(.unique) var id: UUID
     var name: String
-    var employees: [Employee] = []
+    @Relationship(inverse: \Employee.department) var employees: [Employee] = []
     
-    init(name: String) {
-        self.id = UUID()
+    init(id: UUID = UUID(), name: String, employees: [Employee] = []) {
+        self.id = id
         self.name = name
-        
+        self.employees = employees
     }
 }

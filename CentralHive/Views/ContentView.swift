@@ -8,13 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
+    
     var body: some View {
         TabView {
             Tab("Departments", systemImage: "house.fill") {
-                HomeView()
+                DepartmentListView()
             }
             Tab("Employees", systemImage: "person.fill") {
-                EmployeeView()
+                EmployeeListView()
             }
             Tab("Hardware", systemImage: "desktopcomputer") {
                 HardwareView()

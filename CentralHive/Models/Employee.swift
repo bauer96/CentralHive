@@ -9,17 +9,19 @@ import Foundation
 import SwiftData
 
 @Model
-class Employee {
+class Employee: ObservableObject {
     @Attribute(.unique) var id: UUID
     var name: String
     var position: String
-    var department: Department?
-    
-    init(id: UUID, name: String, position: String, department: Department? = nil) {
-        self.id = id
+    @Relationship var department: Department?
+    @Relationship var hardware: Hardware?
+ 
+    init(name: String, position: String, department: Department?, hardware: Hardware? = nil) {
+        self.id = UUID()
         self.name = name
         self.position = position
         self.department = department
+        self.hardware = hardware
     }
     
 }
