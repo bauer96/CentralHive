@@ -13,9 +13,10 @@ struct EmployeeListView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var isAddingEmployee = false
     @Query var employees: [Employee]
+    @State private var path = [Employee]()
     
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             Text("EmployeeListView")
             List {
                 ForEach(employees) { employee in
@@ -26,6 +27,7 @@ struct EmployeeListView: View {
                 .onDelete(perform: deleteEmployees)
                 }
             .navigationTitle("Employees")
+            .navigationDestination(for: Employee.self, destination: EmployeeDetailView.init)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {

@@ -12,9 +12,10 @@ struct DepartmentListView: View {
     @Environment(\.modelContext) private var modelContext
     @Query var departments: [Department]
     @State private var isAddingDepartment = false
+    @State private var path = [Department]()
     
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             VStack {
                 if departments.isEmpty {
                     ContentUnavailableView {
@@ -42,6 +43,9 @@ struct DepartmentListView: View {
                 }
             }
             .navigationTitle("Departments")
+            .navigationDestination(for: Department.self) { department in
+                DepartmentDetailView(department: department)
+            }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
