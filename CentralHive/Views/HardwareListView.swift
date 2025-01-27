@@ -23,6 +23,15 @@ struct HardwareListView: View {
                             Text(hardware.name)
                                 .font(.headline)
                             Text(hardware.model)
+                            if let employee = hardware.employee {
+                                VStack(alignment: .leading) {
+                                    Text(employee.name)
+                                        .font(.headline)
+                                    Text(employee.position)
+                                        .font(.subheadline)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
                            
                         }
                     }
