@@ -5,9 +5,12 @@
 //  Created by Hannes Bauer on 21.01.25.
 //
 
+import SwiftData
 import SwiftUI
 
 struct ContentView: View {
+  
+    @Environment(\.modelContext) private var modelContext
     
     var body: some View {
         TabView {
@@ -18,7 +21,7 @@ struct ContentView: View {
                 EmployeeListView()
             }
             Tab("Hardware", systemImage: "desktopcomputer") {
-                HardwareView()
+                HardwareListView()
             }
             Tab("Settings", systemImage: "gearshape.fill") {
                 SettingsView()
@@ -26,7 +29,16 @@ struct ContentView: View {
         }
     }
 }
-
-#Preview {
-    ContentView()
-}
+//
+//#Preview {
+//    do {
+//        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+//        let container = try ModelContainer(for: Department.self, configurations: config)
+//        
+//        let exampleDepartment = Department(id: UUID(), name: "IT", employees: [])
+//        return ContentView()
+//            .modelContainer(container)
+//    } catch {
+//        fatalError("Failed to Create Model Container")
+//    }
+//}

@@ -11,12 +11,12 @@ import SwiftData
 @Model
 class Employee: ObservableObject {
     @Attribute(.unique) var id: UUID
-    var name: String
+    var name: String = ""
     var position: String
     @Relationship var department: Department?
     @Relationship var hardware: Hardware?
  
-    init(name: String, position: String, department: Department?, hardware: Hardware? = nil) {
+    init(name: String = "", position: String, department: Department?, hardware: Hardware? = nil) {
         self.id = UUID()
         self.name = name
         self.position = position

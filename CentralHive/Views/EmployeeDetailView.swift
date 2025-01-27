@@ -21,7 +21,7 @@ struct EmployeeDetailView: View {
     
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        
             Form {
                 Section("Employee Details") {
                     if isEditing {
@@ -29,6 +29,7 @@ struct EmployeeDetailView: View {
                             .font(.title)
                         TextField("Position:", text: $employee.position)
                             .font(.headline)
+                    
                         
                        
                         // TextField("Department:", text: $employee.department?.name)
@@ -66,12 +67,12 @@ struct EmployeeDetailView: View {
                 }
               
             }
-        }
+        
         .padding()
         .navigationTitle(employee.name)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button(isEditing ? "Done" : "Edit Mode") {
+                Button(isEditing ? "Update" : "Edit Mode") {
                     if isEditing {
                         // Save the updated hardware if in edit mode
                         if let hardware = employee.hardware {
@@ -89,10 +90,12 @@ struct EmployeeDetailView: View {
                     }
                     isEditing.toggle()
                 }
+                .buttonStyle(.borderedProminent)
             }
         }
         .sheet(isPresented: $isAddingHardware) {
-            AddHardwareView(employee: employee) // Pass the employee to AddHardwareView
+            AddHardwareView(employee: employee)
+                .presentationDetents([.medium])// Pass the employee to AddHardwareView
         }
         .navigationBarTitleDisplayMode(.inline)
     }

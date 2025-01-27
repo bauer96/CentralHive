@@ -16,7 +16,7 @@ struct AddEmployeeView: View {
     
     @State private var employeeName = ""
     @State private var employeePosition = ""
-    @State private var selectedDepartment: Department?
+    @State private var selectedDepartment: Department? = nil
     
 
     var body: some View {
@@ -30,6 +30,7 @@ struct AddEmployeeView: View {
                 
                 Section("Assign Department") {
                     Picker("Department", selection: $selectedDepartment) {
+                        Text("None").tag(nil as Department?)
                         ForEach(departments) { department in
                             Text(department.name).tag(department as Department?)
                         }
@@ -37,13 +38,20 @@ struct AddEmployeeView: View {
                 }
                 Section {
                     Button("Save") {
-                        let newEmployee = Employee(name: employeeName, position: employeePosition, department: selectedDepartment)
-                        modelContext.insert(newEmployee)
+                        createNewEmployee()
                         dismiss()
                     }
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .buttonStyle(.borderedProminent)
+                    .padding(.vertical)
+                    .disabled(employeeName.isEmpty || employeePosition.isEmpty)
                 }
             }
         }
+    }
+    func createNewEmployee() {
+        let newEmployee = Employee(name: employeeName, position: employeePosition, department: selectedDepartment)
+        modelContext.insert(newEmployee)
     }
 }
     

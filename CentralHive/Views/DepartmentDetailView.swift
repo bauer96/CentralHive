@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct DepartmentDetailView: View {
+    @Environment(\.modelContext) private var modelContext
     @ObservedObject var department: Department
     @Query private var employees: [Employee]
     @State private var isAddingEmployee = false
@@ -39,6 +40,7 @@ struct DepartmentDetailView: View {
                                 }
                             }
                         }
+                        .onDelete(perform: deleteEmployees)
                     }
                 }
         }
@@ -57,11 +59,27 @@ struct DepartmentDetailView: View {
         }
         .sheet(isPresented: $isAddingEmployee) {
              AddEmployeeView()
+                .presentationDetents([.medium])
         }
         .navigationBarTitleDisplayMode(.inline)
+    }
+    func deleteEmployees(_ indexSet: IndexSet) {
+        for index in indexSet {
+            let employee = employees[index]
+            modelContext.delete(employee)
+        }
     }
 }
 
 //#Preview {
-//    DepartmentDetailView()
+//    do {
+//        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+//        let container = try ModelContainer(for: [Employee.self,Department.self], configurations: config)
+//        
+//        let exampleDepartment = Department(id: UUID(), name: "IT", employees: [])
+//        return DepartmentDetailView()
+//            .modelContainer(container)
+//    } catch {
+//        fatalError("Failed to Create Model Container")
+//    }
 //}

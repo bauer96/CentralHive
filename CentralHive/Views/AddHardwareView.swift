@@ -27,22 +27,25 @@ struct AddHardwareView: View {
             }
             
             Button("Save") {
-                // Create new hardware with input values
-                let newHardware = Hardware(id: UUID(), name: hardwareName, serialNumber: hardwareSerialNumber, model: hardwareModel)
-                
-                // Assign this new hardware to the employee
-                employee.hardware = newHardware
-                
-                // Insert the new hardware into the context
-                modelContext.insert(newHardware)
-                
-                // Dismiss the AddHardwareView
+                addHardware()
                 dismiss()
             }
+            .frame(maxWidth: .infinity, alignment: .trailing)
+            .buttonStyle(.borderedProminent)
             .disabled(hardwareName.isEmpty || hardwareModel.isEmpty || hardwareSerialNumber.isEmpty)
         }
         .navigationTitle("Add Hardware")
         .navigationBarTitleDisplayMode(.inline)
+    }
+    func addHardware() {
+        // Create new hardware with input values
+        let newHardware = Hardware(id: UUID(), name: hardwareName, serialNumber: hardwareSerialNumber, model: hardwareModel)
+        
+        // Assign this new hardware to the employee
+        employee.hardware = newHardware
+        
+        // Insert the new hardware into the context
+        modelContext.insert(newHardware)
     }
 }
 

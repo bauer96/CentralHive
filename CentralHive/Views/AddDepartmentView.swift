@@ -18,18 +18,26 @@ struct AddDepartmentView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section {
+                Section("Department Details") {
                     TextField("Department Name", text: $departmentName)
                    
                 }
                 Button("Speichern") {
-                    let newDepartment = Department(name: departmentName)
-                    modelContext.insert(newDepartment)
+                    addDepartment()
                     dismiss()
                 }
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .buttonStyle(.borderedProminent)
+                .padding(.vertical)
+                .disabled(departmentName.isEmpty)
             }
             .navigationTitle("Add Department")
+            .navigationBarTitleDisplayMode(.inline)
         }
+    }
+    func addDepartment() {
+        let newDepartment = Department(name: departmentName)
+        modelContext.insert(newDepartment)
     }
 }
 
