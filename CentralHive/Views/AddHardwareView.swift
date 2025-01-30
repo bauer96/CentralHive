@@ -12,6 +12,8 @@ struct AddHardwareView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) var dismiss
     
+    // TODO: remove ObservedObject for migration to Observable Class.. // @Bindable use check if possible? 
+    
     @ObservedObject var employee: Employee
     
     @State private var hardwareName = ""
@@ -38,13 +40,8 @@ struct AddHardwareView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
     func addHardware() {
-        // Create new hardware with input values
         let newHardware = Hardware(id: UUID(), name: hardwareName, serialNumber: hardwareSerialNumber, model: hardwareModel)
-        
-        // Assign this new hardware to the employee
         employee.hardware = newHardware
-        
-        // Insert the new hardware into the context
         modelContext.insert(newHardware)
     }
 }

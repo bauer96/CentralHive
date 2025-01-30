@@ -9,12 +9,14 @@ import SwiftUI
 import SwiftData
 
 struct EmployeeDetailView: View {
+    
+    // TODO: remove ObservedObject for migration to Observable Class.. // @Bindable use check if possible? 
     @ObservedObject var employee: Employee
    
+    
     @State private var isAddingHardware = false
     @State private var isEditing = false
     
-    // Track the hardware details for editing
     @State private var hardwareName = ""
     @State private var hardwareModel = ""
     @State private var hardwareSerialNumber = ""

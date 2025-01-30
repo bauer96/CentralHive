@@ -17,7 +17,7 @@ struct EmployeeListView: View {
     
     var body: some View {
         NavigationStack(path: $path) {
-            Text("EmployeeListView")
+           
             List {
                 ForEach(employees) { employee in
                 NavigationLink(destination: EmployeeDetailView(employee: employee)) {

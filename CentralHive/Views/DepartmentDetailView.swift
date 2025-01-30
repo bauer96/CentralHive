@@ -10,7 +10,10 @@ import SwiftData
 
 struct DepartmentDetailView: View {
     @Environment(\.modelContext) private var modelContext
+    
+    // TODO: remove ObservedObject for migration to Observable Class.. // @Bindable use check if possible? 
     @ObservedObject var department: Department
+    
     @Query private var employees: [Employee]
     @State private var isAddingEmployee = false
 
@@ -18,10 +21,6 @@ struct DepartmentDetailView: View {
     var body: some View {
         NavigationStack {
             VStack {
-//                Text(department.name)
-//                    .font(.largeTitle)
-//                    .padding()
-                
                 Text("Number of Employees: \(department.employees.count)")
                     .font(.headline)
                     .padding(.bottom)

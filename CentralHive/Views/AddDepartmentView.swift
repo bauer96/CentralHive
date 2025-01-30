@@ -22,7 +22,7 @@ struct AddDepartmentView: View {
                     TextField("Department Name", text: $departmentName)
                    
                 }
-                Button("Speichern") {
+                Button("Save") {
                     addDepartment()
                     dismiss()
                 }

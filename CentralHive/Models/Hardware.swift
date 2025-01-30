@@ -8,6 +8,8 @@
 import Foundation
 import SwiftData
 
+// TODO: Migrate from ObservableObject to Observable Class iOS 17.0 
+
 @Model
 class Hardware: ObservableObject {
     @Attribute(.unique) var id: UUID
