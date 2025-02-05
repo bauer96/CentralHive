@@ -39,8 +39,13 @@ struct HardwareDetailView: View {
                 if let employee = hardware.employee {
                     NavigationLink(destination: EmployeeDetailView(employee: employee)) {
                         VStack(alignment: .leading) {
-                            Text(employee.name)
+                            Text(employee.firstName)
                                 .font(.headline)
+                            Text(employee.lastName)
+                                .font(.headline)
+                            Text(employee.emailAddress)
+                                .font(.subheadline)
+                          
                             Text(employee.position)
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)

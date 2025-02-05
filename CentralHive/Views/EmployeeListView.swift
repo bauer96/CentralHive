@@ -21,7 +21,8 @@ struct EmployeeListView: View {
             List {
                 ForEach(employees) { employee in
                 NavigationLink(destination: EmployeeDetailView(employee: employee)) {
-                    Text(employee.name)
+                    Text(employee.firstName)
+                    Text(employee.lastName)
                 }
                 }
                 .onDelete(perform: deleteEmployees)

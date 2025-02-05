@@ -9,13 +9,13 @@ import SwiftUI
 import SwiftData
 
 struct DepartmentListView: View {
+
     @Environment(\.modelContext) private var modelContext
     @Query var departments: [Department]
     @State private var isAddingDepartment = false
-    @State private var path = [Department]()
-    
+
     var body: some View {
-        NavigationStack(path: $path) {
+        NavigationStack {
             VStack {
                 if departments.isEmpty {
                     ContentUnavailableView {
@@ -32,7 +32,9 @@ struct DepartmentListView: View {
                 } else {
                     List {
                         ForEach(departments) { department in
-                            NavigationLink(destination: DepartmentDetailView(department: department)) {
+                            NavigationLink(destination:
+                                            DepartmentDetailView(department: department))
+                            {
                                 Text(department.name)
                                 Text("\(department.employees.count)")
                                 Image(systemName: "person.3.fill")
@@ -43,9 +45,6 @@ struct DepartmentListView: View {
                 }
             }
             .navigationTitle("Departments")
-            .navigationDestination(for: Department.self) { department in
-                DepartmentDetailView(department: department)
-            }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {

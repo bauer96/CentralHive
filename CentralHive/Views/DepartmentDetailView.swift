@@ -4,20 +4,17 @@
 //
 //  Created by Hannes Bauer on 22.01.25.
 //
-
 import SwiftUI
 import SwiftData
 
 struct DepartmentDetailView: View {
     @Environment(\.modelContext) private var modelContext
     
-    // TODO: remove ObservedObject for migration to Observable Class.. // @Bindable use check if possible? 
-    @ObservedObject var department: Department
-    
-    @Query private var employees: [Employee]
+    // TODO: remove ObservedObject for migration to Observable Class.. // @Bindable use check if possible?
+    @Bindable var department: Department
+
     @State private var isAddingEmployee = false
 
-    
     var body: some View {
         NavigationStack {
             VStack {
@@ -31,8 +28,11 @@ struct DepartmentDetailView: View {
                             NavigationLink(destination: EmployeeDetailView(employee: employee)) {
                                 VStack(alignment: .leading) {
                                     VStack(alignment: .leading) {
-                                        Text(employee.name)
-                                            .font(.headline)
+                                        HStack {
+                                            Text(employee.firstName)
+                                            Text(employee.lastName)
+                                        }
+                                        .font(.headline)
                                         Text(employee.position)
                                             .font(.subheadline).foregroundStyle(.gray)
                                     }
@@ -64,7 +64,7 @@ struct DepartmentDetailView: View {
     }
     func deleteEmployees(_ indexSet: IndexSet) {
         for index in indexSet {
-            let employee = employees[index]
+            let employee = department.employees[index]
             modelContext.delete(employee)
         }
     }
@@ -74,7 +74,7 @@ struct DepartmentDetailView: View {
 //    do {
 //        let config = ModelConfiguration(isStoredInMemoryOnly: true)
 //        let container = try ModelContainer(for: [Employee.self,Department.self], configurations: config)
-//        
+//
 //        let exampleDepartment = Department(id: UUID(), name: "IT", employees: [])
 //        return DepartmentDetailView()
 //            .modelContainer(container)

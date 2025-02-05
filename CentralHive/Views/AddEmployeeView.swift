@@ -14,8 +14,10 @@ struct AddEmployeeView: View {
     @Environment(\.dismiss) var dismiss
     @Query private var departments: [Department]
     
-    @State private var employeeName = ""
+    @State private var employeeFirstName = ""
+    @State private var employeeLastName = ""
     @State private var employeePosition = ""
+    @State private var emailAddress = ""
     @State private var selectedDepartment: Department? = nil
     
 
@@ -23,8 +25,14 @@ struct AddEmployeeView: View {
         NavigationStack {
             Form {
                 Section("Employee Details") {
-                    TextField("Employee Name", text: $employeeName)
+                    TextField("First Name", text: $employeeFirstName)
+                        .textContentType(.givenName)
+                    TextField("Last Name", text: $employeeLastName)
+                        .textContentType(.familyName)
                     TextField("Position", text: $employeePosition)
+                    TextField("Emailadress: ", text: $emailAddress)
+                        .textContentType(.emailAddress)
+                        .textInputAutocapitalization(.never)
               
                 }
                 
@@ -44,14 +52,15 @@ struct AddEmployeeView: View {
                     .frame(maxWidth: .infinity, alignment: .trailing)
                     .buttonStyle(.borderedProminent)
                     .padding(.vertical)
-                    .disabled(employeeName.isEmpty || employeePosition.isEmpty)
+                    .disabled(employeeFirstName.isEmpty || employeeLastName.isEmpty || emailAddress.isEmpty ||  employeePosition.isEmpty)
                 }
             }
         }
     }
     func createNewEmployee() {
-        let newEmployee = Employee(name: employeeName, position: employeePosition, department: selectedDepartment)
+        let newEmployee = Employee(id: UUID(), firstName: employeeFirstName , lastName: employeeLastName, position: employeePosition, emailAddress: emailAddress, department: selectedDepartment)
         modelContext.insert(newEmployee)
+        try? modelContext.save()
     }
 }
     
