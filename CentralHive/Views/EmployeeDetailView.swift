@@ -3,26 +3,18 @@
 //  CentralHive
 //
 //  Created by Hannes Bauer on 22.01.25.
-//
 import SwiftUI
 import SwiftData
-import SwiftUI
 
 struct EmployeeDetailView: View {
-    @ObservedObject var employee: Employee
-    
+    @State var employee: Employee
     @State private var isAddingHardware = false
     @State private var isEditing = false
     
-    @State private var hardwareName = ""
-    @State private var hardwareModel = ""
-    @State private var hardwareSerialNumber = ""
-
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                
-                // Employee Information
+                // Employee Information section remains the same
                 SectionBox(title: "Employee Details", icon: "person.fill") {
                     if isEditing {
                         TextField("First Name", text: $employee.firstName)
@@ -41,84 +33,77 @@ struct EmployeeDetailView: View {
                     }
                 }
                 
-                // Hardware Information
-                if let hardware = employee.hardware {
-                    SectionBox(title: "Assigned Hardware", icon: "desktopcomputer") {
-                        if isEditing {
-                            TextField("Hardware Name", text: $hardwareName)
-                                .textFieldStyle(.roundedBorder)
-                            TextField("Model", text: $hardwareModel)
-                                .textFieldStyle(.roundedBorder)
-                            TextField("Serial Number", text: $hardwareSerialNumber)
-                                .textFieldStyle(.roundedBorder)
-                        } else {
-                            InfoRow(label: "Hardware", value: hardware.name)
-                            InfoRow(label: "Model", value: hardware.model)
-                            InfoRow(label: "Serial Number", value: hardware.serialNumber)
-                            InfoRow(label: "OS", value: hardware.os)
-                            InfoRow(label: "RAM", value: hardware.ram)
-                            InfoRow(label: "Storage", value: hardware.storage)
-                            InfoRow(label: "Purchase Date", value: hardware.purchaseDate?.formatted() ?? "No Purchase Date")
-
-                            InfoRow(label: "Waranty Expire", value: hardware.warrantyExpiry?.formatted() ?? "No Waranty found")
+                // Hardware Cards Section
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Image(systemName: "desktopcomputer")
+                            .foregroundColor(.blue)
+                        Text("Hardware Details")
+                            .font(.headline)
+                    }
+                    .padding(.horizontal)
+                    
+                    VStack(spacing: 16) {
+                        ForEach(employee.hardwareItems) { hardware in
+                            // Hardware Card
+                            VStack(alignment: .leading) {
+                                HStack {
+                                    Image(systemName: hardwareTypeIcon(hardware.type ?? .other))
+                                    Text((hardware.type ?? .other).rawValue.capitalized)
+                                        .font(.headline)
+                                }
+                                .padding(.bottom, 4)
+                                
+                                InfoRow(label: "Name", value: hardware.name)
+                                InfoRow(label: "Model", value: hardware.model)
+                                InfoRow(label: "Serial Number", value: hardware.serialNumber)
+                                InfoRow(label: "OS", value: hardware.os)
+                                InfoRow(label: "RAM", value: hardware.ram)
+                                InfoRow(label: "Storage", value: hardware.storage)
+                                InfoRow(label: "Purchase Date", value: hardware.purchaseDate?.formatted() ?? "No Purchase Date")
+                                InfoRow(label: "Warranty Expire", value: hardware.warrantyExpiry?.formatted() ?? "No Warranty found")
+                            }
+                            .padding()
+                            .background(Color(.systemGray6))
+                            .cornerRadius(12)
+                            .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+                        }
+                        
+                        Button(action: { isAddingHardware.toggle() }) {
+                            Label("Add Hardware", systemImage: "plus.circle.fill")
+                                .foregroundStyle(.blue)
+                                .padding()
                         }
                     }
-                } else {
-                    Button(action: { isAddingHardware.toggle() }) {
-                        Label("Assign Hardware", systemImage: "plus.circle.fill")
-                            .foregroundColor(.blue)
-                            .padding()
-                    }
+                    .padding(.horizontal)
                 }
-                
-//                // Sample Hardware Inventory
-//                SectionBox(title: "Laptop", icon: "laptopcomputer") {
-//                    InfoRow(label: "Model", value: "HP EliteBook 840 G10")
-//                    InfoRow(label: "Serial Number", value: "ABCXED2123JG", monospaced: true)
-//                    InfoRow(label: "OS", value: "Windows 11")
-//                    InfoRow(label: "RAM", value: "16GB")
-//                    InfoRow(label: "Color", value: "Space Gray")
-//                }
-//                
-//                SectionBox(title: "Phone", icon: "iphone") {
-//                    InfoRow(label: "Model", value: "iPhone 14")
-//                    InfoRow(label: "Serial Number", value: "ABCEXEDSA123JH", monospaced: true)
-//                    InfoRow(label: "OS", value: "iOS")
-//                    InfoRow(label: "Provider", value: "Vodafone")
-//                }
-                
             }
-            .padding()
+            .padding(.vertical)
         }
         .navigationTitle("\(employee.firstName) \(employee.lastName)")
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(isEditing ? "Save" : "Edit") {
-                    if isEditing {
-                        if let hardware = employee.hardware {
-                            hardware.name = hardwareName
-                            hardware.model = hardwareModel
-                            hardware.serialNumber = hardwareSerialNumber
-                        }
-                    } else {
-                        if let hardware = employee.hardware {
-                            hardwareName = hardware.name
-                            hardwareModel = hardware.model
-                            hardwareSerialNumber = hardware.serialNumber
-                        }
-                    }
                     isEditing.toggle()
                 }
                 .buttonStyle(.borderedProminent)
             }
         }
         .sheet(isPresented: $isAddingHardware) {
-            AddHardwareView(
-                employee: employee,
-                purchaseDate: employee.hardware?.purchaseDate ?? Date(), // Default to today if nil
-                warantyExpiry: employee.hardware?.warrantyExpiry ?? Calendar.current.date(byAdding: .year, value: 3, to: Date())! // Default to 3 years from today if nil
-            )
+            AddHardwareView(employee: employee)
                 .presentationDetents([.medium])
+        }
+    }
+    
+    // hardwareTypeIcon function remains the same
+    func hardwareTypeIcon(_ type: HardwareType) -> String {
+        switch type {
+        case .laptop: return "laptopcomputer"
+        case .smartphone: return "iphone"
+        case .tablet: return "ipad"
+        case .desktop: return "desktopcomputer"
+        case .monitor: return "display"
+        case .other: return "gear"
         }
     }
 }

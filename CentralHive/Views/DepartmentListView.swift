@@ -35,9 +35,24 @@ struct DepartmentListView: View {
                             NavigationLink(destination:
                                             DepartmentDetailView(department: department))
                             {
-                                Text(department.name)
-                                Text("\(department.employees.count)")
-                                Image(systemName: "person.3.fill")
+                                HStack {
+                                    VStack(alignment: .leading) {
+                                        Text(department.name)
+                                        
+                                        Spacer()
+                                            .frame(height: 15)
+                                        HStack {
+                                            Image(systemName: "person.3.fill")
+                                            Text("\(department.employees.count)")
+                                            Text("Employees")
+                                        
+                                        }
+                                        .foregroundColor(.secondary)
+                                    }
+                                    
+                                        
+                                    
+                                }
                             }
                         }
                         .onDelete(perform: deleteDepartments)

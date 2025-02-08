@@ -8,11 +8,11 @@
 
 import Foundation
 import SwiftData
+import Observation
 
-// TODO: Migrate from ObservableObject to Observable Class iOS 17.0
 
 @Model
-class Department: ObservableObject {
+class Department {
     @Attribute(.unique) var id: UUID
     var name: String
     @Relationship(inverse: \Employee.department) var employees: [Employee] = []

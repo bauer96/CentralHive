@@ -9,50 +9,43 @@
 import Foundation
 import SwiftData
 
-// TODO: Migrate from ObservableObject to Observable Class iOS 17.0
-
 @Model
-class Hardware: ObservableObject {
+class Hardware {
     @Attribute(.unique) var id: UUID
     var name: String
-    var serialNumber: String
     var model: String
+    var serialNumber: String
     var os: String
     var ram: String
     var storage: String
     var purchaseDate: Date?
     var warrantyExpiry: Date?
-    @Relationship(deleteRule: .nullify, inverse: \Employee.hardware) var employee: Employee?  // Can be assigned to at most one employee
-    
-    init(id: UUID, name: String, serialNumber: String, model: String, os: String, ram: String, storage: String, purchaseDate: Date = Date(), warantyExpiry: Date = Calendar.current.date(byAdding: .year, value: 2, to: Date())!, employee: Employee? = nil) {
+    // Make type optional during migration
+    var type: HardwareType?
+    var employee: Employee?
+
+    init(id: UUID = UUID(), name: String, model: String, serialNumber: String, os: String = "", ram: String = "", storage: String = "", purchaseDate: Date? = nil, warrantyExpiry: Date? = nil, type: HardwareType? = .other) {
         self.id = id
         self.name = name
-        self.serialNumber = serialNumber
         self.model = model
+        self.serialNumber = serialNumber
         self.os = os
         self.ram = ram
         self.storage = storage
         self.purchaseDate = purchaseDate
-        self.warrantyExpiry = warantyExpiry
-        self.employee = employee
+        self.warrantyExpiry = warrantyExpiry
+        self.type = type
     }
-
-//    init(id: UUID = UUID(), name: String, serialNumber: String, model: String, employee: Employee? = nil) {
-//        self.id = id
-//        self.name = name
-//        self.serialNumber = serialNumber
-//        self.model = model
-//        self.employee = employee
-//
-//    }
 }
 
-//    init(id: UUID, name: String, serialNumber: String, model: String) {
-//        self.id = id
-//        self.name = name
-//        self.serialNumber = serialNumber
-//        self.model = model
-//    }
-//
+enum HardwareType: String, Codable, CaseIterable {
+    case laptop
+    case smartphone
+    case tablet
+    case desktop
+    case monitor
+    case other
+}
+
 
 
