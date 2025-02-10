@@ -9,31 +9,19 @@ import SwiftData
 struct EmployeeDetailView: View {
     @State var employee: Employee
     @State private var isAddingHardware = false
-    @State private var isEditing = false
+    @State private var expandedHardwareIDs: Set<UUID> = []
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                // Employee Information section remains the same
+                
                 SectionBox(title: "Employee Details", icon: "person.fill") {
-                    if isEditing {
-                        TextField("First Name", text: $employee.firstName)
-                            .textFieldStyle(.roundedBorder)
-                        TextField("Last Name", text: $employee.lastName)
-                            .textFieldStyle(.roundedBorder)
-                        TextField("Position", text: $employee.position)
-                            .textFieldStyle(.roundedBorder)
-                        TextField("Email", text: $employee.emailAddress)
-                            .textFieldStyle(.roundedBorder)
-                    } else {
-                        InfoRow(label: "Name", value: "\(employee.firstName) \(employee.lastName)")
-                        InfoRow(label: "Position", value: employee.position)
-                        InfoRow(label: "Email", value: employee.emailAddress)
-                        InfoRow(label: "Department", value: employee.department?.name ?? "Not Assigned")
-                    }
+                    InfoRow(label: "Name", value: "\(employee.firstName) \(employee.lastName)")
+                    InfoRow(label: "Position", value: employee.position)
+                    InfoRow(label: "Email", value: employee.emailAddress)
+                    InfoRow(label: "Department", value: employee.department?.name ?? "Not Assigned")
                 }
                 
-                // Hardware Cards Section
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
                         Image(systemName: "desktopcomputer")
@@ -42,60 +30,83 @@ struct EmployeeDetailView: View {
                             .font(.headline)
                     }
                     .padding(.horizontal)
-                    
+
+                    if employee.hardwareItems.isEmpty {
+                        Text("No hardware assigned.")
+                            .foregroundColor(.gray)
+                            .italic()
+                            .padding(.horizontal)
+                    }
+
                     VStack(spacing: 16) {
                         ForEach(employee.hardwareItems) { hardware in
-                            // Hardware Card
-                            VStack(alignment: .leading) {
+                            VStack {
                                 HStack {
                                     Image(systemName: hardwareTypeIcon(hardware.type ?? .other))
-                                    Text((hardware.type ?? .other).rawValue.capitalized)
+                                        .foregroundColor(.blue)
+                                        .font(.system(size: 20))
+                                        .frame(width: 24, height: 24)
+
+                                    Text(hardware.name)
                                         .font(.headline)
+
+                                    Spacer()
+
+                                    Button(action: {
+                                        if expandedHardwareIDs.contains(hardware.id) {
+                                            expandedHardwareIDs.remove(hardware.id)
+                                        } else {
+                                            expandedHardwareIDs.insert(hardware.id)
+                                        }
+                                    }) {
+                                        Image(systemName: expandedHardwareIDs.contains(hardware.id) ? "chevron.up" : "chevron.down")
+                                            .foregroundColor(.gray)
+                                    }
                                 }
-                                .padding(.bottom, 4)
-                                
-                                InfoRow(label: "Name", value: hardware.name)
-                                InfoRow(label: "Model", value: hardware.model)
-                                InfoRow(label: "Serial Number", value: hardware.serialNumber)
-                                InfoRow(label: "OS", value: hardware.os)
-                                InfoRow(label: "RAM", value: hardware.ram)
-                                InfoRow(label: "Storage", value: hardware.storage)
-                                InfoRow(label: "Purchase Date", value: hardware.purchaseDate?.formatted() ?? "No Purchase Date")
-                                InfoRow(label: "Warranty Expire", value: hardware.warrantyExpiry?.formatted() ?? "No Warranty found")
+                                .padding()
+
+                                if expandedHardwareIDs.contains(hardware.id) {
+                                    Divider()
+                                    VStack(alignment: .leading, spacing: 4) {
+                                     
+                                        InfoRow(label: "Model", value: hardware.model)
+                                        InfoRow(label: "Serial Number", value: hardware.serialNumber)
+                                        InfoRow(label: "OS", value: hardware.os)
+                                        InfoRow(label: "RAM", value: hardware.ram)
+                                        InfoRow(label: "Storage", value: hardware.storage)
+                                        InfoRow(label: "Purchase Date", value: hardware.purchaseDate?.formatted() ?? "No Purchase Date")
+                                        InfoRow(label: "Warranty Expire", value: hardware.warrantyExpiry?.formatted() ?? "No Warranty found")
+                                    }
+                                    .padding()
+                                    .background(Color(.systemGray6))
+                                    .cornerRadius(12)
+                                    .transition(.opacity)
+                                }
                             }
-                            .padding()
                             .background(Color(.systemGray6))
                             .cornerRadius(12)
-                            .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+                            .shadow(radius: 2)
                         }
                         
+                        // Button wird IMMER angezeigt
                         Button(action: { isAddingHardware.toggle() }) {
                             Label("Add Hardware", systemImage: "plus.circle.fill")
-                                .foregroundStyle(.blue)
+                                .foregroundColor(.blue)
                                 .padding()
                         }
                     }
-                    .padding(.horizontal)
                 }
             }
             .padding(.vertical)
         }
         .navigationTitle("\(employee.firstName) \(employee.lastName)")
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button(isEditing ? "Save" : "Edit") {
-                    isEditing.toggle()
-                }
-                .buttonStyle(.borderedProminent)
-            }
-        }
         .sheet(isPresented: $isAddingHardware) {
             AddHardwareView(employee: employee)
                 .presentationDetents([.medium])
         }
     }
-    
-    // hardwareTypeIcon function remains the same
+}
+
     func hardwareTypeIcon(_ type: HardwareType) -> String {
         switch type {
         case .laptop: return "laptopcomputer"
@@ -106,7 +117,6 @@ struct EmployeeDetailView: View {
         case .other: return "gear"
         }
     }
-}
 
 // MARK: - UI Components
 

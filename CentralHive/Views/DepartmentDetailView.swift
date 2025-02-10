@@ -21,40 +21,52 @@ struct DepartmentDetailView: View {
                 
                 VStack(spacing: 25) {
                     ForEach(department.employees) { employee in
-                        NavigationLink(destination: EmployeeDetailView(employee: employee)) {
-                            VStack(alignment: .leading, spacing: 12) {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text("\(employee.firstName) \(employee.lastName)")
-                                        .font(.headline)
-                                    Text(employee.position)
-                                        .font(.subheadline)
-                                        .foregroundStyle(.gray)
-                                }
-                                
-                                // Hardware section
-                                if employee.hardwareItems.isEmpty {
-                                    Text("No Hardware")
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
-                                        .padding(6)
-                                        .background(Color(.systemGray6))
-                                        .cornerRadius(8)
-                                } else {
-                                    HStack(spacing: 8) {
-                                        ForEach(Array(Set(employee.hardwareItems.compactMap { $0.type })), id: \.self) { type in
-                                            Image(systemName: hardwareTypeIcon(type))
-                                                .foregroundColor(.blue)
+                        ZStack(alignment: .topTrailing) {
+                            NavigationLink(destination: EmployeeDetailView(employee: employee)) {
+                                VStack(alignment: .leading, spacing: 12) {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text("\(employee.firstName) \(employee.lastName)")
+                                            .font(.headline)
+                                        Text(employee.position)
+                                            .font(.subheadline)
+                                            .foregroundStyle(.gray)
+                                    }
+                                    
+                                    // Hardware section
+                                    if employee.hardwareItems.isEmpty {
+                                        Text("No Hardware")
+                                            .font(.caption)
+                                            .foregroundColor(.gray)
+                                            .padding(6)
+                                            .background(Color(.systemGray6))
+                                            .cornerRadius(8)
+                                    } else {
+                                        HStack(spacing: 8) {
+                                            ForEach(Array(Set(employee.hardwareItems.compactMap { $0.type })), id: \.self) { type in
+                                                Image(systemName: hardwareTypeIcon(type))
+                                                    .foregroundColor(.blue)
+                                            }
                                         }
                                     }
                                 }
+                                .padding()
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(Color(.systemBackground))
+                                .cornerRadius(12)
+                                .shadow(color: .gray.opacity(0.5), radius: 5, x: 0, y: 2)
                             }
-                            .padding()
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(Color(.systemBackground))
-                            .cornerRadius(12)
-                            .shadow(color: .gray.opacity(0.5), radius: 5, x: 0, y: 2)
+                            .buttonStyle(PlainButtonStyle())
+                            
+                            // Delete button
+                            Button(action: {
+                                deleteEmployee(employee)
+                            }) {
+                                Image(systemName: "trash.circle.fill")
+                                    .foregroundStyle(.red)
+                                    .font(.title3)
+                            }
+                            .offset(x: -8, y: 8)
                         }
-                        .buttonStyle(PlainButtonStyle())
                     }
                 }
                 .padding(.horizontal)
@@ -87,6 +99,12 @@ struct DepartmentDetailView: View {
         case .monitor: return "display"
         case .other: return "gear"
         }
+    }
+    
+    // Added delete function
+    func deleteEmployee(_ employee: Employee) {
+        department.employees.removeAll { $0.id == employee.id }
+        modelContext.delete(employee)
     }
 }
 
