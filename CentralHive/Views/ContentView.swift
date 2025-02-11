@@ -12,6 +12,8 @@ struct ContentView: View {
   
     @Environment(\.modelContext) private var modelContext
     
+    private let selectedTabColor = Color.iconForeground
+    
     var body: some View {
         TabView {
             Tab("Departments", systemImage: "house.fill") {
@@ -27,6 +29,15 @@ struct ContentView: View {
                 SettingsView()
             }
         }
+        .tint(selectedTabColor)
+        .accentColor(selectedTabColor)
+        .onAppear {
+                   // Customize TabBar appearance
+                   let appearance = UITabBarAppearance()
+                   appearance.backgroundColor = .background// Or any UIColor
+                   UITabBar.appearance().standardAppearance = appearance
+                   UITabBar.appearance().scrollEdgeAppearance = appearance
+               }
     }
 }
 //

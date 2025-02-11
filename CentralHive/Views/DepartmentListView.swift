@@ -9,6 +9,8 @@ import SwiftUI
 import SwiftData
 
 struct DepartmentListView: View {
+    
+ 
 
     @Environment(\.modelContext) private var modelContext
     @Query var departments: [Department]
@@ -20,14 +22,18 @@ struct DepartmentListView: View {
                 if departments.isEmpty {
                     ContentUnavailableView {
                         Label("Welcome to CentralHive", systemImage: "rectangle.stack.fill.badge.plus")
+                            .foregroundStyle(.iconForeground)
                     } description: {
                         Text("Manage Employees and Hardware")
+                            .foregroundStyle(.textForeground)
                     } actions: {
                         Button("Create Department") {
                             isAddingDepartment.toggle()
                         }
+                        .foregroundColor(.background)
                         .buttonStyle(.borderedProminent)
                     }
+                    .background(Color(.background))
 
                 } else {
                     List {
@@ -57,6 +63,8 @@ struct DepartmentListView: View {
                         }
                         .onDelete(perform: deleteDepartments)
                     }
+                    .scrollContentBackground(.hidden)
+                    .background(Color(.background))
                 }
             }
             .navigationTitle("Departments")
