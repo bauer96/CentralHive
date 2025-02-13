@@ -118,7 +118,7 @@ struct DepartmentDetailView: View {
         }
         .sheet(isPresented: $isAddingEmployee) {
             AddEmployeeView()
-                .presentationDetents([.medium])
+                .presentationDetents([.large])
         }
         .navigationBarTitleDisplayMode(.inline)
     }

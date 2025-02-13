@@ -43,6 +43,9 @@ struct HardwareListView: View {
                 }
                 .onDelete(perform: deleteHardware)
             }
+            .scrollContentBackground(.hidden)
+            .background(Color(.background))
+            
             .navigationTitle("Hardware")
             .navigationDestination(for: Hardware.self, destination: HardwareDetailView.init)
             .toolbar {

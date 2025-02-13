@@ -55,6 +55,10 @@ struct EmployeeListView: View {
                 }
                 .onDelete(perform: deleteEmployees)
             }
+            .scrollContentBackground(.hidden)
+            .background(Color(.background))
+            
+            
             .navigationTitle("Employees")
             .navigationDestination(for: Employee.self, destination: EmployeeDetailView.init)
             .toolbar {
