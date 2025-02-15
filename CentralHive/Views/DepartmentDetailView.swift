@@ -26,6 +26,7 @@ struct DepartmentDetailView: View {
             ScrollView {
                 VStack(spacing: 10) {
                     Text("Number of Employees: \(department.employees.count)")
+                        .foregroundStyle(.textForeground)
                         .font(.headline)
                         .padding(.vertical)
                     
@@ -110,6 +111,7 @@ struct DepartmentDetailView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: {
+                    print("DEBUG: Opening AddEmployeeView with department:", department.name)
                     isAddingEmployee.toggle()
                 }) {
                     Image(systemName: "plus")
@@ -117,7 +119,7 @@ struct DepartmentDetailView: View {
             }
         }
         .sheet(isPresented: $isAddingEmployee) {
-            AddEmployeeView()
+            AddEmployeeView(department: department)
                 .presentationDetents([.large])
         }
         .navigationBarTitleDisplayMode(.inline)

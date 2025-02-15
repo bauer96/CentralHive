@@ -17,7 +17,13 @@ struct AddEmployeeView: View {
     @State private var employeeLastName = ""
     @State private var employeePosition = ""
     @State private var emailAddress = ""
-    @State private var selectedDepartment: Department? = nil
+    @State private var selectedDepartment: Department?
+
+   
+    init(department: Department? = nil) {
+        _selectedDepartment = State(initialValue: department)
+        print("DEBUG: Received department:", department?.name ?? "nil") // 🔍 Debugging
+    }
 
     var body: some View {
         NavigationStack {
@@ -25,9 +31,11 @@ struct AddEmployeeView: View {
                 Form {
                     Section {
                         CustomTextField(placeholder: "First Name", text: $employeeFirstName)
-                              CustomTextField(placeholder: "Last Name", text: $employeeLastName)
-                              CustomTextField(placeholder: "Position", text: $employeePosition)
-                              CustomTextField(placeholder: "Email Address", text: $emailAddress, icon: "envelope")
+                        CustomTextField(placeholder: "Last Name", text: $employeeLastName)
+                        CustomTextField(placeholder: "Position", text: $employeePosition)
+                        CustomTextField(placeholder: "Email Address", text: $emailAddress, icon: "envelope")
+                            .textContentType(.emailAddress)
+                            .textInputAutocapitalization(.never)
                     } header: {
                         Text("Employee Details")
                             .foregroundStyle(.textForeground)
@@ -36,7 +44,7 @@ struct AddEmployeeView: View {
 
                     Section {
                         Picker("Department", selection: $selectedDepartment) {
-                            Text("None").tag(nil as Department?)
+//                            Text("None").tag(nil as Department?)
                             ForEach(departments) { department in
                                 Text(department.name).tag(department as Department?)
                             }
@@ -51,7 +59,6 @@ struct AddEmployeeView: View {
                 .scrollContentBackground(.hidden)
                 .frame(maxHeight: 420)
 
-              
                 Button(action: {
                     createNewEmployee()
                     dismiss()
@@ -76,7 +83,6 @@ struct AddEmployeeView: View {
         }
     }
 
-   
     private var isSaveDisabled: Bool {
         employeeFirstName.isEmpty || employeeLastName.isEmpty || emailAddress.isEmpty || employeePosition.isEmpty
     }
@@ -94,7 +100,7 @@ struct AddEmployeeView: View {
         try? modelContext.save()
     }
 }
-    #Preview {
-        AddEmployeeView()
-    }
+//    #Preview {
+//        AddEmployeeView()
+//    }
 

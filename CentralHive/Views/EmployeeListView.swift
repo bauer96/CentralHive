@@ -15,6 +15,7 @@ struct EmployeeListView: View {
     @Query var employees: [Employee]
     @State private var path = [Employee]()
     
+    
     var body: some View {
         NavigationStack(path: $path) {
             List {
