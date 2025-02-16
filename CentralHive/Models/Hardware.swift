@@ -16,15 +16,25 @@ class Hardware {
     var model: String
     var serialNumber: String
     var os: String
-    var ram: String
-    var storage: String
+    var ram: Int
+    var storage: Int
     var purchaseDate: Date?
     var warrantyExpiry: Date?
-    // Make type optional during migration
+   
     var type: HardwareType?
     var employee: Employee?
+    
+    
+    var formattedRAM: String {
+        return "\(ram) GB"
+    }
+    
+    var formattedStorage: String {
+        return "\(storage) GB"
+    }
+    
 
-    init(id: UUID = UUID(), name: String, model: String, serialNumber: String, os: String = "", ram: String = "", storage: String = "", purchaseDate: Date? = nil, warrantyExpiry: Date? = nil, type: HardwareType? = .other) {
+    init(id: UUID = UUID(), name: String, model: String, serialNumber: String, os: String = "", ram: Int, storage: Int, purchaseDate: Date? = nil, warrantyExpiry: Date? = nil, type: HardwareType? = .other) {
         self.id = id
         self.name = name
         self.model = model
@@ -32,9 +42,15 @@ class Hardware {
         self.os = os
         self.ram = ram
         self.storage = storage
-        self.purchaseDate = purchaseDate
-        self.warrantyExpiry = warrantyExpiry
+        self.purchaseDate = purchaseDate?.normalizedDate()
+        self.warrantyExpiry = warrantyExpiry?.normalizedDate()
         self.type = type
+    }
+}
+
+extension Date {
+    func normalizedDate() -> Date {
+        return Calendar.current.startOfDay(for: self) // Sets time to 00:00:00
     }
 }
 

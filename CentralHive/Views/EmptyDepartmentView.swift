@@ -25,6 +25,10 @@ struct EmptyDepartmentView: View {
             .foregroundColor(.background)
             .buttonStyle(.borderedProminent)
         }
+        .sheet(isPresented: $isAddingDepartment) {
+            AddDepartmentView()
+                .presentationDetents([.large])
+        }
         .background(Color(.background))
     }
     }

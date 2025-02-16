@@ -59,20 +59,10 @@ struct AddEmployeeView: View {
                 .scrollContentBackground(.hidden)
                 .frame(maxHeight: 420)
 
-                Button(action: {
+                CustomButton(title: "Save", isDisabled: employeeFirstName.isEmpty || employeeLastName.isEmpty || employeePosition.isEmpty || emailAddress.isEmpty) {
                     createNewEmployee()
                     dismiss()
-                }) {
-                    Text("Save")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
-                        .background(isSaveDisabled ? Color(.textBackGround).opacity(0.2) : Color(.textForeground).opacity(0.6))
-                        .foregroundColor(.iconForeground)
-                        .cornerRadius(10)
                 }
-                .padding(.horizontal)
-                .disabled(isSaveDisabled)
 
                 Spacer()
             }
@@ -81,10 +71,6 @@ struct AddEmployeeView: View {
             .navigationTitle("Add Employee")
             .navigationBarTitleDisplayMode(.inline)
         }
-    }
-
-    private var isSaveDisabled: Bool {
-        employeeFirstName.isEmpty || employeeLastName.isEmpty || emailAddress.isEmpty || employeePosition.isEmpty
     }
 
     func createNewEmployee() {

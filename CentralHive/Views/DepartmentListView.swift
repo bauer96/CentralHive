@@ -39,13 +39,6 @@ struct DepartmentListView: View {
             }
         }
     }
-    
-    func deleteDepartments(_ indexSet: IndexSet) {
-        for index in indexSet {
-            let department = departments[index]
-            modelContext.delete(department)
-        }
-    }
 }
 
 

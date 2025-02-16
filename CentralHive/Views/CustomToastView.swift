@@ -20,14 +20,14 @@ struct CustomToastView: ViewModifier {
                     Spacer()
                     HStack {
                         Image(systemName: isError ? "xmark.circle.fill" : "checkmark.circle.fill")
-                            .foregroundStyle(.white)
+                            .foregroundStyle(.iconForeground)
                         Text(message)
                             .foregroundStyle(.white)
                             .font(.subheadline)
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
-                    .background(isError ? .red : .green)
+                    .background(isError ? .red : Color(.background))
                     .cornerRadius(8)
                     .padding(.bottom, 20)
                     .transition(.move(edge: .bottom))

@@ -25,7 +25,7 @@ struct EmployeeDetailView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
                         Image(systemName: "desktopcomputer")
-                            .foregroundColor(.blue)
+                            .foregroundColor(.iconForeground)
                         Text("Hardware Details")
                             .font(.headline)
                     }
@@ -43,7 +43,7 @@ struct EmployeeDetailView: View {
                             VStack {
                                 HStack {
                                     Image(systemName: hardwareTypeIcon(hardware.type ?? .other))
-                                        .foregroundColor(.blue)
+                                        .foregroundColor(.iconForeground)
                                         .font(.system(size: 20))
                                         .frame(width: 24, height: 24)
 
@@ -60,7 +60,7 @@ struct EmployeeDetailView: View {
                                         }
                                     }) {
                                         Image(systemName: expandedHardwareIDs.contains(hardware.id) ? "chevron.up" : "chevron.down")
-                                            .foregroundColor(.gray)
+                                            .foregroundColor(.iconForeground)
                                     }
                                 }
                                 .padding()
@@ -72,8 +72,8 @@ struct EmployeeDetailView: View {
                                         InfoRow(label: "Model", value: hardware.model)
                                         InfoRow(label: "Serial Number", value: hardware.serialNumber)
                                         InfoRow(label: "OS", value: hardware.os)
-                                        InfoRow(label: "RAM", value: hardware.ram)
-                                        InfoRow(label: "Storage", value: hardware.storage)
+                                        InfoRow(label: "RAM", value: hardware.formattedRAM)
+                                        InfoRow(label: "Storage", value: hardware.formattedStorage)
                                         InfoRow(label: "Purchase Date", value: hardware.purchaseDate?.formatted() ?? "No Purchase Date")
                                         InfoRow(label: "Warranty Expire", value: hardware.warrantyExpiry?.formatted() ?? "No Warranty found")
                                     }
@@ -88,10 +88,10 @@ struct EmployeeDetailView: View {
                             .shadow(radius: 2)
                         }
                         
-                        // Button wird IMMER angezeigt
+                       
                         Button(action: { isAddingHardware.toggle() }) {
-                            Label("Add Hardware", systemImage: "plus.circle.fill")
-                                .foregroundColor(.blue)
+                            Label("Add Hardware", systemImage: "plus.circle")
+                                .foregroundColor(.iconForeground)
                                 .padding()
                         }
                     }
@@ -102,7 +102,7 @@ struct EmployeeDetailView: View {
         .navigationTitle("\(employee.firstName) \(employee.lastName)")
         .sheet(isPresented: $isAddingHardware) {
             AddHardwareView(employee: employee)
-                .presentationDetents([.medium])
+                .presentationDetents([.large])
         }
     }
 }
@@ -118,57 +118,7 @@ struct EmployeeDetailView: View {
         }
     }
 
-// MARK: - UI Components
 
-struct SectionBox<Content: View>: View {
-    var title: String
-    var icon: String
-    var content: Content
-    
-    init(title: String, icon: String, @ViewBuilder content: () -> Content) {
-        self.title = title
-        self.icon = icon
-        self.content = content()
-    }
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Image(systemName: icon)
-                    .foregroundColor(.blue)
-                Text(title)
-                    .font(.headline)
-            }
-            .padding(.bottom, 4)
-            
-            VStack(alignment: .leading, spacing: 4) {
-                content
-            }
-            .padding()
-            .background(Color(.systemGray6))
-            .cornerRadius(12)
-        }
-        .padding(.horizontal)
-    }
-}
-
-struct InfoRow: View {
-    var label: String
-    var value: String
-    var monospaced: Bool = false
-    
-    var body: some View {
-        HStack {
-            Text(label + ":")
-                .fontWeight(.semibold)
-            Spacer()
-            Text(value)
-                .font(monospaced ? .system(.body, design: .monospaced) : .body)
-                .foregroundColor(.gray)
-        }
-        .padding(.vertical, 2)
-    }
-}
 
 
 

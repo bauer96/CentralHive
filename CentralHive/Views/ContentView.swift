@@ -18,15 +18,19 @@ struct ContentView: View {
         TabView {
             Tab("Departments", systemImage: "house.fill") {
                 DepartmentListView()
+                    .preferredColorScheme(.dark)
             }
             Tab("Employees", systemImage: "person.fill") {
                 EmployeeListView()
+                    .preferredColorScheme(.dark)
             }
             Tab("Hardware", systemImage: "desktopcomputer") {
                 HardwareListView()
+                    .preferredColorScheme(.dark)
             }
             Tab("Settings", systemImage: "gearshape.fill") {
                 SettingsView()
+                    .preferredColorScheme(.dark)
             }
         }
         .tint(selectedTabColor)

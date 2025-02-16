@@ -13,6 +13,7 @@ struct AddHardwareView: View {
     @Environment(\.dismiss) var dismiss
     
     @State var employee: Employee
+
     
     @State private var hardwareName = ""
     @State private var hardwareModel = ""
@@ -21,42 +22,54 @@ struct AddHardwareView: View {
     @State private var hardwareRAM = ""
     @State private var storage = ""
     @State private var purchaseDate = Date()
-    @State private var warrantyExpiry = Calendar.current.date(byAdding: .year, value: 3, to: Date()) ?? Date()
+    @State private var warrantyExpiry = Date()
     @State private var selectedType: HardwareType = .laptop
     
     var body: some View {
         NavigationView {
-            Form {
-                Section("Hardware Details") {
-                    Picker("Type", selection: $selectedType) {
-                        ForEach(HardwareType.allCases, id: \.self) { type in
-                            Label(type.rawValue.capitalized, systemImage: hardwareTypeIcon(type))
-                                .tag(type)
+            VStack(spacing: 6) {
+                Form {
+                    Section {
+                        Picker("Type", selection: $selectedType) {
+                            ForEach(HardwareType.allCases, id: \.self) { type in
+                                Label(type.rawValue.capitalized, systemImage: hardwareTypeIcon(type))
+                                
+                                    .tag(type)
+                            }
                         }
+                        CustomTextField(placeholder: "Hardware Name", text: $hardwareName)
+                        CustomTextField(placeholder: "Hardware Model", text: $hardwareModel)
+                        CustomTextField(placeholder: "Serial Number", text: $hardwareSerialNumber)
+                        CustomTextField(placeholder: "Operating System", text: $hardwareOS)
+                        CustomTextField(placeholder: "RAM", text: $hardwareRAM)
+                            .keyboardType(.numberPad)
+                     
+                        CustomTextField(placeholder: "Storage", text: $storage)
+                            .keyboardType(.numberPad)
+                    } header: {
+                        Text("Hardware Details")
+                            .foregroundStyle(.textForeground)
                     }
-                    TextField("Hardware Name", text: $hardwareName)
-                    TextField("Hardware Model", text: $hardwareModel)
-                    TextField("Serial Number", text: $hardwareSerialNumber)
-                    TextField("OS", text: $hardwareOS)
-                    TextField("RAM", text: $hardwareRAM)
-                    TextField("Storage", text: $storage)
+                    
+                    Section("Dates") {
+                        DatePicker("Purchase Date", selection: $purchaseDate, displayedComponents: .date)
+                        
+                        DatePicker("Warranty Expiry", selection: $warrantyExpiry, displayedComponents: .date)
+                    }
+                    
+                
+                   
                 }
                 
-                Section("Dates") {
-                    DatePicker("Purchase Date", selection: $purchaseDate, displayedComponents: .date)
-                    DatePicker("Warranty Expiry", selection: $warrantyExpiry, displayedComponents: .date)
+                CustomButton(title: "Save", isDisabled: hardwareName.isEmpty) {
+                    addHardware()
+                    dismiss()
                 }
-                
-                Section {
-                    Button("Save Hardware") {
-                        addHardware()
-                        dismiss()
-                    }
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .buttonStyle(.borderedProminent)
-                    .disabled(hardwareName.isEmpty || hardwareModel.isEmpty || hardwareSerialNumber.isEmpty)
-                }
+
             }
+              
+                
+          
             .navigationTitle("Add Hardware")
             .navigationBarTitleDisplayMode(.inline)
         }
@@ -74,13 +87,17 @@ struct AddHardwareView: View {
     }
     
     private func addHardware() {
+        
+        let ramValue = Int(hardwareRAM.trimmingCharacters(in: .whitespaces)) ?? 0
+        let storageValue = Int(storage.trimmingCharacters(in: .whitespaces)) ?? 0
+        
         let newHardware = Hardware(
             name: hardwareName,
             model: hardwareModel,
             serialNumber: hardwareSerialNumber,
             os: hardwareOS,
-            ram: hardwareRAM,
-            storage: storage,
+            ram: ramValue,
+            storage: storageValue,
             purchaseDate: purchaseDate,
             warrantyExpiry: warrantyExpiry,
             type: selectedType

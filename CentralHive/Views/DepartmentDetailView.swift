@@ -19,7 +19,6 @@ struct DepartmentDetailView: View {
 
     var body: some View {
         ZStack {
-            // Background color for the entire view
             Color(.background)
                 .ignoresSafeArea()
             
@@ -38,7 +37,7 @@ struct DepartmentDetailView: View {
                                         VStack(alignment: .leading, spacing: 4) {
                                             Text("\(employee.firstName) \(employee.lastName)")
                                                 .font(.headline)
-                                            Text(employee.position)
+                                            Text("\(employee.position) \(department.name)")
                                                 .font(.subheadline)
                                                 .foregroundStyle(.gray)
                                         }
@@ -47,35 +46,35 @@ struct DepartmentDetailView: View {
                                         if employee.hardwareItems.isEmpty {
                                             Text("No Hardware")
                                                 .font(.caption)
-                                                .foregroundColor(.gray)
+                                                .foregroundStyle(.iconForeground)
                                                 .padding(6)
-                                                .background(Color(.systemGray6))
+                                                .background(Color(.background))
                                                 .cornerRadius(8)
                                         } else {
                                             HStack(spacing: 8) {
                                                 ForEach(Array(Set(employee.hardwareItems.compactMap { $0.type })), id: \.self) { type in
                                                     Image(systemName: hardwareTypeIcon(type))
-                                                        .foregroundColor(.blue)
+                                                        .foregroundStyle(.iconForeground)
                                                 }
                                             }
                                         }
                                     }
                                     .padding()
                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                    .background(Color(.systemBackground))
-                                    .cornerRadius(12)
-                                    .shadow(color: .gray.opacity(0.5), radius: 5, x: 0, y: 2)
+                                    .background(Color(.textBackGround).opacity(0.10))
+                                    .cornerRadius(15)
+                                  
                                 }
-                                .buttonStyle(PlainButtonStyle())
+                             .buttonStyle(PlainButtonStyle())
                                 
                                 // Delete button
                                 Button(action: {
                                     employeeToDelete = employee
                                     showDeleteAlert = true
                                 }) {
-                                    Image(systemName: "trash.circle.fill")
-                                        .foregroundStyle(.red)
-                                        .font(.title)
+                                    Image(systemName: "trash")
+                                        .foregroundStyle(.gray)
+                                    
                                 }
                                 .offset(x: -8, y: 8)
                             }

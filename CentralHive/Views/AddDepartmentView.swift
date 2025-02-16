@@ -18,8 +18,7 @@ struct AddDepartmentView: View {
                 Form {
                     Section {
                         CustomTextField(placeholder: "Department", text: $departmentName)
-//                        TextField("Department Name", text: $departmentName)
-//                            .foregroundStyle(.textForeground)
+
                     } header: {
                         Text("Department Details")
                             .foregroundStyle(.textForeground)
@@ -29,20 +28,10 @@ struct AddDepartmentView: View {
                 .frame(maxHeight: 150)
                 
                
-                Button(action: {
+                CustomButton(title: "Save", isDisabled: departmentName.isEmpty) {
                     addDepartment()
                     dismiss()
-                }) {
-                    Text("Save")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
-                        .background(departmentName.isEmpty ? Color(.textBackGround).opacity(0.2) : Color(.textForeground).opacity(0.6))
-                        .foregroundColor(.iconForeground)
-                        .cornerRadius(10)
                 }
-                .padding(.horizontal)
-                .disabled(departmentName.isEmpty)
 
                 Spacer() 
                    

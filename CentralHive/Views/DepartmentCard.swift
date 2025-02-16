@@ -17,7 +17,7 @@ struct DepartmentCard: View {
             VStack {
                 HStack {
                     
-                    VStack() {
+                    VStack {
                         Text(department.name)
                             .font(.headline)
                             .foregroundStyle(.textForeground)
@@ -42,7 +42,7 @@ struct DepartmentCard: View {
                 .cornerRadius(15)
                 .shadow(radius: 10)
             }
-            .background(Color(.textForeground).opacity(0.1))
+            .background(Color(.textBackGround).opacity(0.2))
             .cornerRadius(15)
             .shadow(radius: 5)
         }
