@@ -7,49 +7,73 @@
 
 import SwiftUI
 
-
 struct SettingsView: View {
     @State private var darkMode = false
     @State private var notificationsEnabled = true
     @State private var isShowingAboutView = false
     
-    // App version (you can update this dynamically if needed)
+    
     let appVersion = "1.0.0 Beta"
 
     var body: some View {
         NavigationView {
-            Form {
-                Section(header: Text("Appearance")) {
-                    Toggle("Dark Mode", isOn: $darkMode)
-                }
+            VStack {
+                // Image at the top, centered
+                Image("myImage")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 150, height: 150)
+                    .padding(.top, 20)
                 
-                Section(header: Text("Notifications")) {
-                    Toggle("Enable Notifications", isOn: $notificationsEnabled)
-                }
-                
-                Section(header: Text("App Info")) {
-                    Text("App Version: \(appVersion)")
+                Text("Hannes Bauer")
+                    .font(.footnote)
+                Text("user.name@company.de")
+                    .textContentType(.emailAddress)
+                    .font(.footnote)
+                    .foregroundStyle(.iconForeground)
+
+             
+                Form {
+//                    Section(header: Text("Appearance")) {
+//                        Toggle("Dark Mode", isOn: $darkMode)
+//                    }
                     
-                    Button("About") {
-                        isShowingAboutView.toggle()
+                    Section(header: Text("Notifications")) {
+                        Toggle("Enable Notifications", isOn: $notificationsEnabled)
+                    }
+                    
+                    Section(header: Text("App Info")) {
+                        Button("About") {
+                            isShowingAboutView.toggle()
+                        }
+                    }
+                    
+                    Section {
+                        Button("Log Out") {
+                            // Logout logic here later...
+                        }
+                        .foregroundColor(.red)
                     }
                 }
                 
-                Section {
-                    Button("Log Out") {
-                        // Logout Logik here later..
-                    }
-                    .foregroundColor(.red)
-                }
+                // App Version Below Form
+                Text("Version \(appVersion)")
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+                    .padding(.top, 8)
+                    .padding(.bottom, 20)
+                
             }
+            .scrollDisabled(true)
             .navigationTitle("Settings")
             .sheet(isPresented: $isShowingAboutView) {
-                Text("About This App Section is actually in Development")
+                AboutView()
+                .presentationDetents([.medium])
             }
-            .presentationDetents([.medium])
         }
     }
 }
+
 
 
 #Preview {
