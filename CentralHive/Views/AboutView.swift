@@ -10,6 +10,13 @@ import SwiftUI
 struct AboutView: View {
     var body: some View {
         VStack {
+            Text("This App is still in Development")
+                .foregroundStyle(.textForeground)
+                .fontWeight(.bold)
+            
+            Spacer()
+                .frame(height: 20)
+            
             Text("CentralHive.io")
                 .foregroundStyle(.iconForeground)
                 .font(.headline)

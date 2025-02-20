@@ -16,6 +16,7 @@ struct DepartmentDetailView: View {
     @State private var showToast = false
     @State private var toastMessage = ""
     @State private var isErrorToast = false
+   
 
     var body: some View {
         ZStack {
@@ -24,10 +25,18 @@ struct DepartmentDetailView: View {
             
             ScrollView {
                 VStack(spacing: 10) {
-                    Text("Number of Employees: \(department.employees.count)")
-                        .foregroundStyle(.textForeground)
-                        .font(.headline)
-                        .padding(.vertical)
+                    
+                    HStack {
+                        Image(systemName: department.employees.count == 1 ? "person.fill" : "person.3.fill")
+                        Text(String.localizedStringWithFormat("%d %@", department.employees.count, department.employees.count == 1 ? "Employee " : "Employees"))
+                            .foregroundStyle(.secondary)
+                     
+                    }
+                    .padding(.vertical)
+//                    Text("Number of Employees: \(department.employees.count)")
+//                        .foregroundStyle(.textForeground)
+//                        .font(.headline)
+//                        .padding(.vertical)
                     
                     VStack(spacing: 25) {
                         ForEach(department.employees) { employee in

@@ -23,8 +23,8 @@ struct DepartmentCard: View {
                             .foregroundStyle(.textForeground)
                         
                         HStack {
-                            Image(systemName: "person.3.fill")
-                            Text("\(department.employees.count) Employees")
+                            Image(systemName: department.employees.count == 1 ? "person.fill" : "person.3.fill")
+                            Text(String.localizedStringWithFormat("%d %@", department.employees.count, department.employees.count == 1 ? "Employee " : "Employees"))
                                 .foregroundStyle(.secondary)
                          
                         }
