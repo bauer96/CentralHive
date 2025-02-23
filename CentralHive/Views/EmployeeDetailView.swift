@@ -9,6 +9,7 @@ import SwiftData
 struct EmployeeDetailView: View {
     @State var employee: Employee
     @State private var isAddingHardware = false
+    @State private var isEditingEmployee = false
     @State private var expandedHardwareIDs: Set<UUID> = []
     
     var body: some View {
@@ -22,6 +23,15 @@ struct EmployeeDetailView: View {
                     InfoRow(label: "Department", value: employee.department?.name ?? "Not Assigned")
                 }
                 
+                Button(action: { isEditingEmployee.toggle() }) {
+                    Label("Edit Employee", systemImage: "pencil")
+                        .foregroundColor(.iconForeground)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(12)
+                }
+                .padding(.horizontal)
+                
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
                         Image(systemName: "desktopcomputer")
@@ -30,6 +40,7 @@ struct EmployeeDetailView: View {
                             .font(.headline)
                     }
                     .padding(.horizontal)
+                    .padding(.bottom)
 
                     if employee.hardwareItems.isEmpty {
                         Text("No hardware assigned.")
@@ -68,14 +79,13 @@ struct EmployeeDetailView: View {
                                 if expandedHardwareIDs.contains(hardware.id) {
                                     Divider()
                                     VStack(alignment: .leading, spacing: 4) {
-                                     
                                         InfoRow(label: "Model", value: hardware.model)
                                         InfoRow(label: "Serial Number", value: hardware.serialNumber)
                                         InfoRow(label: "OS", value: hardware.os)
                                         InfoRow(label: "RAM", value: hardware.formattedRAM)
                                         InfoRow(label: "Storage", value: hardware.formattedStorage)
-                                        InfoRow(label: "Purchase Date", value: hardware.purchaseDate?.formatted() ?? "No Purchase Date")
-                                        InfoRow(label: "Warranty Expire", value: hardware.warrantyExpiry?.formatted() ?? "No Warranty found")
+                                        InfoRow(label: "Purchase Date", value: hardware.formattedPurchaseDate)
+                                        InfoRow(label: "Warranty Expire", value: hardware.formattedWarrantyExpiry)
                                     }
                                     .padding()
                                     .background(Color(.systemGray6))
@@ -88,7 +98,6 @@ struct EmployeeDetailView: View {
                             .shadow(radius: 2)
                         }
                         
-                       
                         Button(action: { isAddingHardware.toggle() }) {
                             Label("Add Hardware", systemImage: "plus.circle")
                                 .foregroundColor(.iconForeground)
@@ -99,26 +108,30 @@ struct EmployeeDetailView: View {
             }
             .padding(.vertical)
         }
+        .scrollContentBackground(.hidden)
+        .background(Color(.background))
         .navigationTitle("\(employee.firstName) \(employee.lastName)")
         .sheet(isPresented: $isAddingHardware) {
             AddHardwareView(employee: employee)
                 .presentationDetents([.large])
         }
+        .sheet(isPresented: $isEditingEmployee) {
+            EditEmployeeView(employee: $employee)
+                .presentationDetents([.large])
+        }
     }
 }
 
-    func hardwareTypeIcon(_ type: HardwareType) -> String {
-        switch type {
-        case .laptop: return "laptopcomputer"
-        case .smartphone: return "iphone"
-        case .tablet: return "ipad"
-        case .desktop: return "desktopcomputer"
-        case .monitor: return "display"
-        case .other: return "gear"
-        }
+func hardwareTypeIcon(_ type: HardwareType) -> String {
+    switch type {
+    case .laptop: return "laptopcomputer"
+    case .smartphone: return "iphone"
+    case .tablet: return "ipad"
+    case .desktop: return "desktopcomputer"
+    case .monitor: return "display"
+    case .other: return "gear"
     }
-
-
+}
 
 
 

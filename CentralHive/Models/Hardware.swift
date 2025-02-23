@@ -33,6 +33,13 @@ class Hardware {
         return "\(storage) GB"
     }
     
+    var formattedPurchaseDate: String {
+         return purchaseDate?.formatted(.dateTime.year().month().day()) ?? "N/A"
+     }
+     
+     var formattedWarrantyExpiry: String {
+         return warrantyExpiry?.formatted(.dateTime.year().month().day()) ?? "N/A"
+     }
 
     init(id: UUID = UUID(), name: String, model: String, serialNumber: String, os: String = "", ram: Int, storage: Int, purchaseDate: Date? = nil, warrantyExpiry: Date? = nil, type: HardwareType? = .other) {
         self.id = id
@@ -42,15 +49,9 @@ class Hardware {
         self.os = os
         self.ram = ram
         self.storage = storage
-        self.purchaseDate = purchaseDate?.normalizedDate()
-        self.warrantyExpiry = warrantyExpiry?.normalizedDate()
+        self.purchaseDate = purchaseDate
+        self.warrantyExpiry = warrantyExpiry
         self.type = type
-    }
-}
-
-extension Date {
-    func normalizedDate() -> Date {
-        return Calendar.current.startOfDay(for: self) // Sets time to 00:00:00
     }
 }
 
