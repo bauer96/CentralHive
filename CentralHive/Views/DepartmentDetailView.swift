@@ -28,17 +28,13 @@ struct DepartmentDetailView: View {
                     
                     HStack {
                         Image(systemName: department.employees.count == 1 ? "person.fill" : "person.3.fill")
-                        Text(String.localizedStringWithFormat("%d %@", department.employees.count, department.employees.count == 1 ? "Employee " : "Employees"))
+                        Text("\(department.employees.count)")
                             .foregroundStyle(.secondary)
                      
                     }
                     .padding(.vertical)
-//                    Text("Number of Employees: \(department.employees.count)")
-//                        .foregroundStyle(.textForeground)
-//                        .font(.headline)
-//                        .padding(.vertical)
                     
-                    VStack(spacing: 25) {
+                    VStack(spacing: 10) {
                         ForEach(department.employees) { employee in
                             ZStack(alignment: .topTrailing) {
                                 NavigationLink(destination: EmployeeDetailView(employee: employee)) {
@@ -54,7 +50,7 @@ struct DepartmentDetailView: View {
                                         // Hardware section
                                         if employee.hardwareItems.isEmpty {
                                             Text("No Hardware")
-                                                .font(.caption)
+                                                .font(.subheadline)
                                                 .foregroundStyle(.iconForeground)
                                                 .padding(6)
                                                 .background(Color(.background))
